@@ -19,7 +19,7 @@ const Header = () => {
   };
 
   const handleLogOutClick = () => {
-    localStorage.removeItem("guest_session_id");
+    localStorage.removeItem("sessionId");
     navigate("/login");
   };
 

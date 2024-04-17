@@ -13,47 +13,75 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Copyright from "../common/Copyright";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate= useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // eslint-disable-next-line no-unused-vars
     const formData = {
       email: data.get("email"),
       password: data.get("password"),
     };
 
-    try {
-      const response = await axios.post(
-        "https://api.themoviedb.org/3/authentication/guest_session/new",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-          },
-        }
-      );
+    const options = {
+      method: "GET",
+      url: "https://api.themoviedb.org/3/authentication/token/new",
+      headers: {
+        accept: "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
+      },
+    };
 
-      const responseData = response.data;
-      if (responseData.success) {
-        localStorage.setItem("guest_session_id", responseData.guest_session_id);
-        console.log(
-          "Guest session ID stored in local storage:",
-          responseData.guest_session_id
-        );
-        navigate('/')
-      } else {
-        console.error("Failed to get guest session ID.");
-      }
-    } catch (error) {
-      console.error("Failed to get guess session ID.");
-    }
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+        const responseData = response.data;
+        if (responseData.success) {
+          localStorage.setItem("request_token", responseData.request_token);
+          window.location.href = `https://www.themoviedb.org/authenticate/${responseData.request_token}?redirect_to=http://localhost:5173/login`;
+          setIsLoggedIn(true);
+        } else {
+          console.error("Failed to get request token.");
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
+
+
+useEffect(() => {
+    const options = {
+      method: "POST",
+      url: "https://api.themoviedb.org/3/authentication/session/new",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
+      },
+      data: { request_token: localStorage.getItem("request_token") },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log("Current sessionId is: " + response.data.session_id)
+        localStorage.setItem("sessionId", response.data.session_id)
+        navigate('/')
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, [isLoggedIn, navigate]);
 
   return (
     <Container component="main" maxWidth="xs">
