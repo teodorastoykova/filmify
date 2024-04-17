@@ -23,15 +23,15 @@ const TvSeriesDetails = () => {
   const sessionId = useRequireAuth();
 
   useEffect(()=> {
+
     const options = {
-      method: "GET",
-      url: `https://api.themoviedb.org/3/guest_session/${sessionId}/rated/tv`,
-      params: { language: "en-US", sort_by: "created_at.asc" },
+      method: 'GET',
+      url: 'https://api.themoviedb.org/3/account/21198834/rated/tv',
+      params: {language: 'en-US', session_id: sessionId, sort_by: 'created_at.asc'},
       headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-      },
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY'
+      }
     };
 
     axios
@@ -78,7 +78,7 @@ const TvSeriesDetails = () => {
         `https://api.themoviedb.org/3/tv/${seriesId}/rating`,
         { value: newValue },
         {
-          params: { guest_session_id: sessionId },
+          params: { session_id: sessionId },
           headers: {
             "Content-Type": "application/json",
             Authorization:
