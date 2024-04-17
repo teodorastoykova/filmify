@@ -22,7 +22,7 @@ const TvSeriesPoster = ({ tvSeries, onTvSeriesClick }) => {
 
   return(
     <>
-      <div className="movie-poster-container">
+      <Grid container>
         <IconButton onClick={handlePrev} disabled={startIndex === 0}>
           <NavigateBeforeIcon />
         </IconButton>
@@ -43,7 +43,7 @@ const TvSeriesPoster = ({ tvSeries, onTvSeriesClick }) => {
         <IconButton onClick={handleNext} disabled={startIndex + 4 >= tvSeries.length}>
           <NavigateNextIcon />
         </IconButton>
-      </div>
+      </Grid>
     </>
   );
 };

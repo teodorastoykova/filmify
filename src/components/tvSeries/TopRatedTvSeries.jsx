@@ -4,6 +4,7 @@ import TvSeriesPoster from "./TvSeriesPoster";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import useRequireAuth from "../common/useRequireAuth";
+import { Typography } from "@mui/material";
 
 const TopRatedTvSeries = () => {
   const [series, setSeries] = useState([]);
@@ -43,7 +44,7 @@ const TopRatedTvSeries = () => {
   return (
     <>
       <Header />
-      <h1>Top Rated TV Series</h1>
+      <Typography variant="h3" gutterBottom>Top Rated TV Series</Typography>
       <TvSeriesPoster tvSeries={series} onTvSeriesClick={handleTvSeriesClick}/>
     </>
   );

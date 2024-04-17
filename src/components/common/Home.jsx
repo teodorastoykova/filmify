@@ -7,6 +7,7 @@ import MoviePoster from "../movies/MoviePoster";
 import TvSeriesPoster from "../tvSeries/TvSeriesPoster";
 import { useNavigate } from "react-router";
 import useRequireAuth from "./useRequireAuth";
+import { Typography } from "@mui/material";
 
 function Home() {
   const [movies, setMovies] = useState([]);
@@ -49,7 +50,6 @@ function Home() {
         }
       };
       fetchTrendingData();
-      
     } else {
       navigate("/login");
     }
@@ -64,18 +64,20 @@ function Home() {
   };
 
   return sessionId ? (
-    <div className="app-container">
+    <>
       <Header />
-
-      <h1>Trending Movies</h1>
+      <Typography variant="h3" gutterBottom>
+        Trending Movies
+      </Typography>
       <MoviePoster movies={movies} onMovieClick={handleMovieClick} />
-
-      <h1>Trending TV Series</h1>
+      <Typography variant="h3" gutterBottom>
+        Trending TV Series
+      </Typography>
       <TvSeriesPoster
         tvSeries={tvSeries}
         onTvSeriesClick={handleTvSeriesClick}
       />
-    </div>
+    </>
   ) : null;
 }
 

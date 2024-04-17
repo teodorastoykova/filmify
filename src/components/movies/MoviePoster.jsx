@@ -21,7 +21,7 @@ const MoviePoster = ({ movies, onMovieClick }) => {
 
   return(
     <>
-      <div className="movie-poster-container">
+    <Grid container>
         <IconButton onClick={handlePrev} disabled={startIndex === 0}>
           <NavigateBeforeIcon />
         </IconButton>
@@ -42,7 +42,7 @@ const MoviePoster = ({ movies, onMovieClick }) => {
         <IconButton onClick={handleNext} disabled={startIndex + 4 >= movies.length}>
           <NavigateNextIcon />
         </IconButton>
-      </div>
+        </Grid>
     </>
   );
 };

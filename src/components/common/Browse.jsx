@@ -5,6 +5,7 @@ import Header from "./Header";
 import MoviePoster from "../movies/MoviePoster";
 import TvSeriesPoster from "../tvSeries/TvSeriesPoster";
 import useRequireAuth from "./useRequireAuth";
+import { Typography } from "@mui/material";
 
 const Browse = () => {
   const sessionId = useRequireAuth();
@@ -66,19 +67,24 @@ const Browse = () => {
     navigate(`/series/${tvSeries.id}`);
   };
   return sessionId ? (
-    <div className="app-container">
+    <>
       <Header />
-
-      <h1>Search Results For {searchQuery}</h1>
-      <h1>Movies</h1>
+      <Typography variant="h2" gutterBottom>
+        Search Results For {searchQuery}
+      </Typography>
+      <Typography variant="h3" gutterBottom>
+        Movies
+      </Typography>
       <MoviePoster movies={movies} onMovieClick={handleMovieClick} />
 
-      <h1>TV Series</h1>
+      <Typography variant="h3" gutterBottom>
+        TV Series
+      </Typography>
       <TvSeriesPoster
         tvSeries={tvSeries}
         onTvSeriesClick={handleTvSeriesClick}
       />
-    </div>
+    </>
   ) : null;
 };
 

@@ -4,6 +4,7 @@ import MoviePoster from "./MoviePoster";
 import Header from "../common/Header";
 import { useNavigate } from "react-router";
 import useRequireAuth from "../common/useRequireAuth";
+import { Typography } from "@mui/material";
 
 const TopRatedMovies = () => {
   const [movies, setMovies] = useState([]);
@@ -43,7 +44,7 @@ const TopRatedMovies = () => {
   return (
     <>
       <Header />
-      <h1>Top Rated Movies</h1>
+      <Typography variant="h3" gutterBottom>Top Rated Movies</Typography>
       <MoviePoster movies={movies} onMovieClick={handleMovieClick} />
     </>
   );
