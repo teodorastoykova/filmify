@@ -10,11 +10,13 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import StyledRating from "../common/StyledRating";
 import useRequireAuth from "../common/useRequireAuth";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import submitRatingTvSeries from "../../services/tvSeries/TVSeriesSubmitRatingService";
+import getTvSeriesDetails from "../../services/tvSeries/TvSeriesDetailsService";
+import getTvSeriesRating from "../../services/tvSeries/TvSeriesRatingService";
 
 const TvSeriesDetails = () => {
   const { seriesId } = useParams();
@@ -22,75 +24,24 @@ const TvSeriesDetails = () => {
   const [tvSeriesRating, setTvSeriesRating] = useState(0);
   const sessionId = useRequireAuth();
 
-  useEffect(()=> {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tvSeriesDetails = await getTvSeriesDetails(seriesId);
+        setTvSeries(tvSeriesDetails);
 
-    const options = {
-      method: 'GET',
-      url: 'https://api.themoviedb.org/3/account/21198834/rated/tv',
-      params: {language: 'en-US', session_id: sessionId, sort_by: 'created_at.asc'},
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY'
+        const userRating = await getTvSeriesRating(sessionId, seriesId);
+        setTvSeriesRating(userRating);
+      } catch (error) {
+        console.error("Erro", error);
       }
     };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        for (const currTvSeries of response.data.results) {
-          if (currTvSeries.id == seriesId) {
-            console.log(`Rating: ${currTvSeries.rating}`);
-            setTvSeriesRating(currTvSeries.rating);
-            break;
-          }
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }, [seriesId, sessionId])
-
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      url: `https://api.themoviedb.org/3/tv/${seriesId}`,
-      params: { language: "en-US" },
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-      },
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        setTvSeries(response.data);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }, [seriesId]);
+    fetchData();
+  }, [seriesId, sessionId]);
 
   const handleRateClick = async (newValue) => {
-    try {
-      await axios.post(
-        `https://api.themoviedb.org/3/tv/${seriesId}/rating`,
-        { value: newValue },
-        {
-          params: { session_id: sessionId },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-          },
-        }
-      );
-      console.log("Tv Series rating updated: " + newValue);
-      setTvSeriesRating(newValue);
-    } catch (error) {
-      console.error("Error rating tv series: ", error);
-    }
+    submitRatingTvSeries(seriesId, newValue, sessionId);
+    setTvSeriesRating(newValue);
   };
 
   return (

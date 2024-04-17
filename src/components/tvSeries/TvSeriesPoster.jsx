@@ -7,8 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-
-
 const TvSeriesPoster = ({ tvSeries, onTvSeriesClick }) => {
   const [startIndex, setStartIndex] = useState(0);
 

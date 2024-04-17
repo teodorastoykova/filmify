@@ -9,12 +9,14 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import useRequireAuth from "../common/useRequireAuth";
 import StyledRating from "../common/StyledRating";
+import submitRatingMovie from "../../Services/Movies/MovieSubmitRatingService";
+import getUserRating from "../../Services/Movies/MovieRatingService";
+import getMovieDetails from "../../Services/Movies/MovieDetailsService";
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -23,74 +25,23 @@ const MovieDetails = () => {
   const sessionId = useRequireAuth();
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const movieDetails = await getMovieDetails(movieId);
+        setMovie(movieDetails);
 
-    const options = {
-      method: 'GET',
-      url: 'https://api.themoviedb.org/3/account/21198834/rated/movies',
-      params: {language: 'en-US', session_id: sessionId, sort_by: 'created_at.asc'},
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY'
+        const userRating = await getUserRating(sessionId, movieId);
+        setMovieRating(userRating);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        for (const currmovie of response.data.results) {
-          if (currmovie.id == movieId) {
-            console.log(`Rating: ${currmovie.rating}`);
-            setMovieRating(currmovie.rating);
-            break;
-          }
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+    fetchData();
   }, [movieId, sessionId]);
 
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      url: `https://api.themoviedb.org/3/movie/${movieId}`,
-      params: { language: "en-US" },
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-      },
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        setMovie(response.data);
-      })
-      .catch(function (error) {
-        console.error("Error 2" + error);
-      });
-  }, [movieId]);
-
-  const handleRateClick = async (newValue) => {
-    try {
-      await axios.post(
-        `https://api.themoviedb.org/3/movie/${movieId}/rating`,
-        { value: newValue },
-        {
-          params: { session_id: sessionId },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-          },
-        }
-      );
-      console.log("Movie rating updated: " + newValue);
-      setMovieRating(newValue);
-    } catch (error) {
-      console.error("Error rating movie:", error);
-    }
+  const handleRateClick = (newValue) => {
+    submitRatingMovie(movieId, newValue, sessionId);
+    setMovieRating(newValue);
   };
 
   return (

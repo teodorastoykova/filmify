@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Header from "./Header";
 import MoviePoster from "../movies/MoviePoster";
 import TvSeriesPoster from "../tvSeries/TvSeriesPoster";
 import useRequireAuth from "./useRequireAuth";
 import { Typography } from "@mui/material";
+import getBrowseResults from "../../Services/Common/BrowseService"
 
 const Browse = () => {
   const sessionId = useRequireAuth();
@@ -16,47 +16,23 @@ const Browse = () => {
   const [movies, setMovies] = useState([]);
   const [tvSeries, setTvSeries] = useState([]);
   // eslint-disable-next-line no-unused-vars
-  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    if (searchQuery) {
-      const options = {
-        method: "GET",
-        url: "https://api.themoviedb.org/3/search/multi",
-        params: {
-          query: searchQuery,
-          include_adult: "false",
-          language: "en-US",
-        },
-        headers: {
-          accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-        },
-      };
+    const fetchData = async () => {
+      if (searchQuery) {
+        const data = await getBrowseResults(searchQuery);
 
-      axios
-        .request(options)
-        .then(function (response) {
-          console.log(response.data);
+        const results = data || [];
 
-          const results = response.data.results || [];
-          setSearchResults(results);
+        const moviesList = results.filter((item) => item.media_type === "movie" );
+        const tvSeriesList = results.filter((item) => item.media_type === "tv");
 
-          const moviesList = results.filter(
-            (item) => item.media_type === "movie"
-          );
-          const tvSeriesList = results.filter(
-            (item) => item.media_type === "tv"
-          );
+        setMovies(moviesList);
+        setTvSeries(tvSeriesList);
+      }
+    };
 
-          setMovies(moviesList);
-          setTvSeries(tvSeriesList);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
-    }
+    fetchData();
   }, [searchQuery]);
 
   const handleMovieClick = (movie) => {
