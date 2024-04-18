@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 
-import { Typography, Container, Grid, Button } from "@mui/material";
+import { Typography, Container, Grid, Button, Link } from "@mui/material";
 import Header from "../common/Header";
 
 function About() {
@@ -60,7 +60,7 @@ function About() {
         <Typography variant="body1" paragraph>
           Have questions, feedback, or suggestions? We'd love to hear from you!
           Reach out to us at{" "}
-          <a href="mailto:contact@filmify.com">contact@filmify.com</a> and let's
+          <Link href="mailto:contact@filmify.com">contact@filmify.com</Link> and let's
           connect.
         </Typography>
         <Typography variant="h3" gutterBottom>
