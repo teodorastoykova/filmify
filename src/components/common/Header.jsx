@@ -10,14 +10,13 @@ const Header = () => {
     navigate("/");
   };
 
-  const handleMoviesClick = () => {
-    navigate("/movies/top_rated");
+  const handleTopRatedClick = () => {
+    navigate("/top_rated");
   };
 
-  const handleTvSeriesClick = () => {
-    navigate("/series/top_rated");
-  };
-
+  const handleMyWatchListClick = () => {
+    navigate("/my_watch_list")
+  }
   const handleLogOutClick = () => {
     localStorage.removeItem("sessionId");
     navigate("/login");
@@ -31,8 +30,8 @@ const Header = () => {
         </Grid>
         <Grid item>
           <Button onClick={handleHomeClick}>Home</Button>
-          <Button onClick={handleMoviesClick}>Movies</Button>
-          <Button onClick={handleTvSeriesClick}>TV Series</Button>
+          <Button onClick={handleTopRatedClick}>Top Rated</Button>
+          <Button onClick={handleMyWatchListClick}>My Watch List</Button>
           <Button onClick={handleLogOutClick}>Log Out</Button>
         </Grid>
         <SearchBar />

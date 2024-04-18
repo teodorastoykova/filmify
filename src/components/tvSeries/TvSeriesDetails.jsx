@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router";
@@ -13,11 +14,12 @@ import { useEffect, useState } from "react";
 import StyledRating from "../common/StyledRating";
 import useRequireAuth from "../common/useRequireAuth";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import AddIcon from "@mui/icons-material/Add";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import submitRatingTvSeries from "../../Services/TvSeries/TVSeriesSubmitRatingService";
 import getTvSeriesDetails from "../../Services/TvSeries/TvSeriesDetailsService";
 import getTvSeriesRating from "../../Services/TvSeries/TvSeriesRatingService";
-
+import addToWatchList from "../../Services/Common/AddToWatchListService";
 const TvSeriesDetails = () => {
   const { seriesId } = useParams();
   const [tvSeries, setTvSeries] = useState([]);
@@ -44,6 +46,11 @@ const TvSeriesDetails = () => {
     setTvSeriesRating(newValue);
   };
 
+  const handleAddToWatchListClick = () => {
+    console.log("add");
+    addToWatchList("tv", seriesId);
+  };
+
   return (
     <Dialog open={true} maxWidth="md">
       <Card
@@ -63,9 +70,21 @@ const TvSeriesDetails = () => {
           alt={tvSeries.name}
         />
         <CardContent style={{ padding: "16px" }}>
-          <Typography gutterBottom variant="h5" component="div">
-            {tvSeries.name}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography gutterBottom variant="h5" component="div">
+              {tvSeries.name}
+            </Typography>
+            <IconButton onClick={handleAddToWatchListClick}>
+              <AddIcon />
+            </IconButton>
+          </Box>
+
           <Typography variant="h6">
             Rate:
             <StyledRating

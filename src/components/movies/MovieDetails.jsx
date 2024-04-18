@@ -6,18 +6,20 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import AddIcon from "@mui/icons-material/Add";
 import useRequireAuth from "../common/useRequireAuth";
 import StyledRating from "../common/StyledRating";
 import submitRatingMovie from "../../Services/Movies/MovieSubmitRatingService";
 import getUserRating from "../../Services/Movies/MovieRatingService";
 import getMovieDetails from "../../Services/Movies/MovieDetailsService";
-
+import addToWatchList from "../../Services/Common/AddToWatchListService";
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState([]);
@@ -44,6 +46,11 @@ const MovieDetails = () => {
     setMovieRating(newValue);
   };
 
+  const handleAddToWatchListClick = () => {
+    console.log("add");
+    addToWatchList("movie", movieId);
+  };
+
   return (
     <Dialog open={true} maxWidth="md">
       <Card
@@ -63,9 +70,20 @@ const MovieDetails = () => {
           alt={movie.title}
         />
         <CardContent style={{ padding: "16px" }}>
-          <Typography gutterBottom variant="h5" component="div">
-            {movie.title}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography gutterBottom variant="h5" component="div">
+              {movie.title}
+            </Typography>
+            <IconButton onClick={handleAddToWatchListClick}>
+              <AddIcon />
+            </IconButton>
+          </Box>
           <Typography variant="h6">
             Rate:
             <StyledRating
