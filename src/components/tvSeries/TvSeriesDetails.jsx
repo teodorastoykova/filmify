@@ -14,9 +14,9 @@ import StyledRating from "../common/StyledRating";
 import useRequireAuth from "../common/useRequireAuth";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import submitRatingTvSeries from "../../services/tvSeries/TVSeriesSubmitRatingService";
-import getTvSeriesDetails from "../../services/tvSeries/TvSeriesDetailsService";
-import getTvSeriesRating from "../../services/tvSeries/TvSeriesRatingService";
+import submitRatingTvSeries from "../../Services/TvSeries/TVSeriesSubmitRatingService";
+import getTvSeriesDetails from "../../Services/TvSeries/TvSeriesDetailsService";
+import getTvSeriesRating from "../../Services/TvSeries/TvSeriesRatingService";
 
 const TvSeriesDetails = () => {
   const { seriesId } = useParams();
