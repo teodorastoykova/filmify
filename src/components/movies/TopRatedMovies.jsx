@@ -1,40 +1,31 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import MoviePoster from "./MoviePoster";
 import Header from "../common/Header";
 import { useNavigate } from "react-router";
 import useRequireAuth from "../common/useRequireAuth";
 import { Typography } from "@mui/material";
+import getTopRatedMovies from "../../Services/Movies/TopRatedMoviesService";
 
 const TopRatedMovies = () => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
   const sessionId = useRequireAuth();
-  
-  useEffect(() => {
-    if (sessionId) {
-    const topRatedMoviesResponse = {
-      method: "GET",
-      url: "https://api.themoviedb.org/3/movie/top_rated",
-      params: { language: "en-US" },
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-      },
-    };
 
-    axios
-      .request(topRatedMoviesResponse)
-      .then(function (response) {
-        setMovies(response.data.results);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-    } else {
-      navigate('/login')
-    }
+  useEffect(() => {
+    const fetchTopRatedMovies = async () => {
+      try {
+        if (sessionId) {
+          const topRatedMovies = await getTopRatedMovies();
+          setMovies(topRatedMovies);
+        } else {
+          navigate("login");
+          return;
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchTopRatedMovies();
   }, [navigate, sessionId]);
 
   const handleMovieClick = (movie) => {
@@ -44,7 +35,9 @@ const TopRatedMovies = () => {
   return (
     <>
       <Header />
-      <Typography variant="h3" gutterBottom>Top Rated Movies</Typography>
+      <Typography variant="h3" gutterBottom>
+        Top Rated Movies
+      </Typography>
       <MoviePoster movies={movies} onMovieClick={handleMovieClick} />
     </>
   );

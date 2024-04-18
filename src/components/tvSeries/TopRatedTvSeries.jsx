@@ -1,40 +1,30 @@
 import { useEffect, useState } from "react";
 import Header from "../common/Header";
 import TvSeriesPoster from "./TvSeriesPoster";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import useRequireAuth from "../common/useRequireAuth";
 import { Typography } from "@mui/material";
-
+import getTopRatedTvSeries from "../../Services/TvSeries/TopRatedTvSeriesService";
 const TopRatedTvSeries = () => {
   const [series, setSeries] = useState([]);
   const navigate = useNavigate();
   const sessionId = useRequireAuth();
 
   useEffect(() => {
-    if (sessionId){
-    const options = {
-      method: "GET",
-      url: "https://api.themoviedb.org/3/tv/top_rated",
-      params: { language: "en-US" },
-      headers: {
-        accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NThkYzk1YTAxNDQyY2NmZDM0YzJlOWY0MmRiNjY5MCIsInN1YiI6IjY2MTNlOGU5MGJiMDc2MDE0ODJmYjYzNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W6UGD_8V7MgsHRv2EizIyg5KV9ZZb9cHGV4A_Nq_UNY",
-      },
+    const fetchTopRatedTvSeries = async () => {
+      try {
+        if (sessionId) {
+          const topRatedTvSeries = await getTopRatedTvSeries();
+          setSeries(topRatedTvSeries);
+        } else {
+          navigate("/login");
+          return;
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
     };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        setSeries(response.data.results);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-    } else {
-      navigate('/login')
-    }
+    fetchTopRatedTvSeries();
   }, [navigate, sessionId]);
 
   const handleTvSeriesClick = (tvSeries) => {
@@ -44,8 +34,10 @@ const TopRatedTvSeries = () => {
   return (
     <>
       <Header />
-      <Typography variant="h3" gutterBottom>Top Rated TV Series</Typography>
-      <TvSeriesPoster tvSeries={series} onTvSeriesClick={handleTvSeriesClick}/>
+      <Typography variant="h3" gutterBottom>
+        Top Rated TV Series
+      </Typography>
+      <TvSeriesPoster tvSeries={series} onTvSeriesClick={handleTvSeriesClick} />
     </>
   );
 };

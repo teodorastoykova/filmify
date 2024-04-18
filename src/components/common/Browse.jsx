@@ -5,7 +5,7 @@ import MoviePoster from "../movies/MoviePoster";
 import TvSeriesPoster from "../tvSeries/TvSeriesPoster";
 import useRequireAuth from "./useRequireAuth";
 import { Typography } from "@mui/material";
-import getBrowseResults from "../../Services/Common/BrowseService"
+import getBrowseResults from "../../Services/Common/BrowseService";
 
 const Browse = () => {
   const sessionId = useRequireAuth();
@@ -15,20 +15,27 @@ const Browse = () => {
 
   const [movies, setMovies] = useState([]);
   const [tvSeries, setTvSeries] = useState([]);
-  // eslint-disable-next-line no-unused-vars
 
   useEffect(() => {
     const fetchData = async () => {
       if (searchQuery) {
-        const data = await getBrowseResults(searchQuery);
+        try {
+          const data = await getBrowseResults(searchQuery);
 
-        const results = data || [];
+          const results = data || [];
 
-        const moviesList = results.filter((item) => item.media_type === "movie" );
-        const tvSeriesList = results.filter((item) => item.media_type === "tv");
+          const moviesList = results.filter(
+            (item) => item.media_type === "movie"
+          );
+          const tvSeriesList = results.filter(
+            (item) => item.media_type === "tv"
+          );
 
-        setMovies(moviesList);
-        setTvSeries(tvSeriesList);
+          setMovies(moviesList);
+          setTvSeries(tvSeriesList);
+        } catch (error) {
+          console.log("Error fetching data:", error);
+        }
       }
     };
 
