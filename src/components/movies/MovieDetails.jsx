@@ -16,10 +16,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import AddIcon from "@mui/icons-material/Add";
 import useRequireAuth from "../common/useRequireAuth";
 import StyledRating from "../common/StyledRating";
-import submitRatingMovie from "../../Services/Movies/MovieSubmitRatingService";
-import getUserRating from "../../Services/Movies/MovieRatingService";
-import getMovieDetails from "../../Services/Movies/MovieDetailsService";
-import addToWatchList from "../../Services/Common/AddToWatchListService";
+import submitRatingMovie from "../../services/Movies/MovieSubmitRatingService";
+import getUserRating from "../../services/Movies/MovieRatingService";
+import getMovieDetails from "../../services/Movies/MovieDetailsService";
+import addToWatchList from "../../services/Common/AddToWatchListService";
+
 const MovieDetails = () => {
   const { movieId } = useParams();
   const [movie, setMovie] = useState([]);
@@ -66,7 +67,7 @@ const MovieDetails = () => {
         <CardMedia
           component="img"
           height="400"
-          image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+          image={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
           alt={movie.title}
         />
         <CardContent style={{ padding: "16px" }}>
@@ -104,15 +105,15 @@ const MovieDetails = () => {
             {movie.overview}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            Release Date: {movie.release_date}
+            Release Date: {movie.releaseDate}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            Rating: {parseFloat(movie.vote_average).toFixed(2)}
+            Rating: {parseFloat(movie.voteAverage).toFixed(2)}
           </Typography>
           <Typography variant="body2" gutterBottom>
             Produced by:{" "}
-            {movie && movie.production_companies ? (
-              movie.production_companies.map((company) => (
+            {movie && movie.productionCompanies ? (
+              movie.productionCompanies.map((company) => (
                 <span key={company.id}>
                   {" "}
                   {company.logo_path && (

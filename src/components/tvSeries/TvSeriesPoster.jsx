@@ -31,8 +31,8 @@ const TvSeriesPoster = ({ tvSeries, onTvSeriesClick }) => {
                 <CardMedia
                   component="img"
                   height="400"
-                  image={`https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`}
-                  alt={tvSeries.name}
+                  image={`https://image.tmdb.org/t/p/w500${tvSeries.posterPath}`}
+                  alt={tvSeries.title}
                 />
               </Card>
             </Grid>

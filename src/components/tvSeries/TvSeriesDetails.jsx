@@ -16,10 +16,11 @@ import useRequireAuth from "../common/useRequireAuth";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddIcon from "@mui/icons-material/Add";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import submitRatingTvSeries from "../../Services/TvSeries/TVSeriesSubmitRatingService";
-import getTvSeriesDetails from "../../Services/TvSeries/TvSeriesDetailsService";
-import getTvSeriesRating from "../../Services/TvSeries/TvSeriesRatingService";
-import addToWatchList from "../../Services/Common/AddToWatchListService";
+import submitRatingTvSeries from "../../services/TvSeries/TVSeriesSubmitRatingService";
+import getTvSeriesDetails from "../../services/TvSeries/TvSeriesDetailsService";
+import getTvSeriesRating from "../../services/TvSeries/TvSeriesRatingService";
+import addToWatchList from "../../services/Common/AddToWatchListService";
+
 const TvSeriesDetails = () => {
   const { seriesId } = useParams();
   const [tvSeries, setTvSeries] = useState([]);
@@ -66,8 +67,8 @@ const TvSeriesDetails = () => {
         <CardMedia
           component="img"
           height="400"
-          image={`https://image.tmdb.org/t/p/w500${tvSeries.poster_path}`}
-          alt={tvSeries.name}
+          image={`https://image.tmdb.org/t/p/w500${tvSeries.posterPath}`}
+          alt={tvSeries.title}
         />
         <CardContent style={{ padding: "16px" }}>
           <Box
@@ -78,7 +79,7 @@ const TvSeriesDetails = () => {
             }}
           >
             <Typography gutterBottom variant="h5" component="div">
-              {tvSeries.name}
+              {tvSeries.title}
             </Typography>
             <IconButton onClick={handleAddToWatchListClick}>
               <AddIcon />
@@ -105,19 +106,19 @@ const TvSeriesDetails = () => {
             {tvSeries.overview}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            First Air Date: {tvSeries.first_air_date}
+            First Air Date: {tvSeries.releaseDate}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            Rating: {parseFloat(tvSeries.vote_average).toFixed(2)}
+            Rating: {parseFloat(tvSeries.voteAverage).toFixed(2)}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            Seasons: {tvSeries.number_of_seasons} Episodes:{" "}
-            {tvSeries.number_of_episodes}
+            Seasons: {tvSeries.seasons} Episodes:{" "}
+            {tvSeries.episodes}
           </Typography>
           <Typography>
             Produced by:{" "}
-            {tvSeries && tvSeries.production_companies ? (
-              tvSeries.production_companies.map((company) => (
+            {tvSeries && tvSeries.productionCompanies ? (
+              tvSeries.productionCompanies.map((company) => (
                 <span key={company.id}>
                   {company.logo_path && (
                     <img

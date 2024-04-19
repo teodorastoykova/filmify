@@ -32,7 +32,7 @@ const MoviePoster = ({ movies, onMovieClick }) => {
                 <CardMedia
                   component="img"
                   height="400"
-                  image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  image={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
                   alt={movie.title}
                 />
               </Card>
