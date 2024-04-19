@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import TvSeries from "../../models/TvSeries";
 const getTrendingTvSeries = async () => {
   try {
     const response = await axios.get(
@@ -13,7 +13,15 @@ const getTrendingTvSeries = async () => {
         },
       }
     );
-    return response.data.results;
+    const tvSeries = response.data.results.map((tvSerie) => {
+      return new TvSeries(
+        tvSerie.id,
+        tvSerie.name,
+        undefined,
+        tvSerie.poster_path,
+      );
+    });
+    return tvSeries;
   } catch (error) {
     console.log(error);
   }

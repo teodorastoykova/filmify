@@ -1,4 +1,5 @@
 import axios from "axios";
+import Movie from "../../models/Movie";
 
 const getWatchListMovies = async () => {
   try {
@@ -18,7 +19,16 @@ const getWatchListMovies = async () => {
         },
       }
     );
-    return response.data.results;
+
+    const movies = response.data.results.map((movie) => {
+      return new Movie(
+        movie.id,
+        movie.title,
+        undefined,
+        movie.poster_path
+      )
+    })
+    return movies;
   } catch (error) {
     throw new Error("Failed to fetch watch list movies: ", error);
   }

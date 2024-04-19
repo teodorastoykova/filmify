@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import TvSeries from "../../models/TvSeries";
 const getWatchListTvSeries = async () => {
   try {
     const response = await axios.get(
@@ -18,7 +18,15 @@ const getWatchListTvSeries = async () => {
         },
       }
     );
-    return response.data.results
+    const tvSeries = response.data.results.map((tvSerie) => {
+      return new TvSeries(
+        tvSerie.id,
+        tvSerie.name,
+        undefined,
+        tvSerie.poster_path,
+      );
+    });
+    return tvSeries;
   } catch (error) {
     throw new Error("Failed to fetch watch list series: ", error);
   }

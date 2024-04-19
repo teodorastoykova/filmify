@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import Movie from "../../models/Movie";
 const getTrendingMovies = async () => {
   try {
     const response = await axios.get(
@@ -13,7 +13,15 @@ const getTrendingMovies = async () => {
         },
       }
     );
-    return response.data.results;
+    const movies = response.data.results.map((movie) => {
+      return new Movie(
+        movie.id,
+        movie.title,
+        undefined,
+        movie.poster_path,
+      );
+    });
+    return movies;
   } catch (error) {
     return error;
   }

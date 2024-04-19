@@ -1,4 +1,5 @@
 import axios from "axios";
+import Movie from "../../models/Movie";
 
 const getMovieDetails = async (movieId) => {
   const response = await axios.get(
@@ -12,7 +13,17 @@ const getMovieDetails = async (movieId) => {
       },
     }
   );
-  return response.data;
+
+  const movie = new Movie(
+    response.data.id,
+    response.data.title,
+    response.data.overview,
+    response.data.poster_path,
+    response.data.release_date,
+    response.data.vote_average,
+    response.data.production_companies
+  );
+  return movie
 };
 
 export default getMovieDetails;

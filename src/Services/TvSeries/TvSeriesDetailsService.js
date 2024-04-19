@@ -1,4 +1,5 @@
 import axios from "axios";
+import TvSeries from "../../models/TvSeries"
 
 const getTvSeriesDetails = async (seriesId) => {
   const response = await axios.get(
@@ -12,7 +13,18 @@ const getTvSeriesDetails = async (seriesId) => {
       },
     }
   );
-  return response.data;
+  const tvSeries = new TvSeries(
+    response.data.id,
+    response.data.name,
+    response.data.overview,
+    response.data.poster_path,
+    response.data.first_air_date,
+    response.data.vote_average,
+    response.data.number_of_seasons,
+    response.data.number_of_episodes,
+    response.data.production_companies,
+  )
+  return tvSeries;
 };
 
 export default getTvSeriesDetails;

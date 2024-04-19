@@ -1,4 +1,5 @@
 import axios from "axios";
+import Movie from "../../models/Movie";
 
 const getTopRatedMovies = async () => {
   try {
@@ -13,7 +14,15 @@ const getTopRatedMovies = async () => {
         },
       }
     );
-    return response.data.results;
+    const movies = response.data.results.map((movie) => {
+      return new Movie(
+        movie.id,
+        movie.title,
+        undefined,
+        movie.poster_path,
+      );
+    });
+    return movies;
   } catch (error) {
     throw new Error("Error fetching top rated movies:", error);
   }
