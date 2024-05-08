@@ -81,7 +81,7 @@ const TvSeriesDetails = () => {
             <Typography gutterBottom variant="h5" component="div">
               {tvSeries.title}
             </Typography>
-            <IconButton onClick={handleAddToWatchListClick}>
+            <IconButton data-testid="add-to-watchlist-button" onClick={handleAddToWatchListClick}>
               <AddIcon />
             </IconButton>
           </Box>

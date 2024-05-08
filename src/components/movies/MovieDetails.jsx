@@ -43,6 +43,7 @@ const MovieDetails = () => {
   }, [movieId, sessionId]);
 
   const handleRateClick = (newValue) => {
+    console.log("rate");
     submitRatingMovie(movieId, newValue, sessionId);
     setMovieRating(newValue);
   };
@@ -81,13 +82,13 @@ const MovieDetails = () => {
             <Typography gutterBottom variant="h5" component="div">
               {movie.title}
             </Typography>
-            <IconButton onClick={handleAddToWatchListClick}>
+            <IconButton data-testid="add-to-watchlist-button" onClick={handleAddToWatchListClick}>
               <AddIcon />
             </IconButton>
           </Box>
           <Typography variant="h6">
             Rate:
-            <StyledRating
+            <StyledRating data-testid="rate-button"
               value={movieRating || 0}
               onChange={(event, newValue) => {
                 handleRateClick(newValue);

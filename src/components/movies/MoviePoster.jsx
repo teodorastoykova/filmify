@@ -34,6 +34,7 @@ const MoviePoster = ({ movies, onMovieClick }) => {
                   height="400"
                   image={`https://image.tmdb.org/t/p/w500${movie.posterPath}`}
                   alt={movie.title}
+                  data-testid={`movie-poster-${movie.id}`}
                 />
               </Card>
             </Grid>
