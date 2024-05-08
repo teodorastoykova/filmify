@@ -18,6 +18,7 @@ const submitRatingTvSeries = async (seriesId, newValue, sessionId) => {
     return newValue;
   } catch (error) {
     console.error("Error rating tv series: ", error);
+    throw error;
   }
 };
 

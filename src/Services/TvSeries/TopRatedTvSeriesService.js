@@ -1,5 +1,5 @@
 import axios from "axios";
-import TvSeries from "../../models/TvSeries"
+import TvSeries from "../../models/TvSeries";
 const getTopRatedTvSeries = async () => {
   try {
     const response = await axios.get(
@@ -18,13 +18,13 @@ const getTopRatedTvSeries = async () => {
         tvSerie.id,
         tvSerie.name,
         undefined,
-        tvSerie.poster_path,
+        tvSerie.poster_path
       );
     });
     return tvSeries;
   } catch (error) {
-    throw new Error("Failed to get the top rated TV Series.");
+    console.error("Failed to get the top rated TV Series", error);
+    throw error;
   }
 };
-
 export default getTopRatedTvSeries;

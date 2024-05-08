@@ -24,7 +24,8 @@ const getTopRatedMovies = async () => {
     });
     return movies;
   } catch (error) {
-    throw new Error("Error fetching top rated movies:", error);
+    console.error("Error fetching top rated movies:", error);
+    throw error;
   }
 };
 

@@ -18,12 +18,13 @@ const getTrendingTvSeries = async () => {
         tvSerie.id,
         tvSerie.name,
         undefined,
-        tvSerie.poster_path,
+        tvSerie.poster_path
       );
     });
     return tvSeries;
   } catch (error) {
-    console.log(error);
+    console.error("Failed to get the trending TV Series", error);
+    throw error;
   }
 };
 

@@ -18,6 +18,7 @@ const submitRatingMovie = async (movieId, newValue, sessionId) => {
     return newValue;
   } catch (error) {
     console.error("Error rating movie:", error);
+    throw error;
   }
 };
 export default submitRatingMovie;

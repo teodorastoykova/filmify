@@ -9,7 +9,7 @@ const getWatchListMovies = async () => {
         params: {
           language: "en-US",
           page: "1",
-          session_id: localStorage.getItem('sessionId'),
+          session_id: localStorage.getItem("sessionId"),
           sort_by: "created_at.asc",
         },
         headers: {
@@ -21,18 +21,13 @@ const getWatchListMovies = async () => {
     );
 
     const movies = response.data.results.map((movie) => {
-      return new Movie(
-        movie.id,
-        movie.title,
-        undefined,
-        movie.poster_path
-      )
-    })
+      return new Movie(movie.id, movie.title, undefined, movie.poster_path);
+    });
     return movies;
   } catch (error) {
-    throw new Error("Failed to fetch watch list movies: ", error);
+    console.error("Failed to fetch watch list movies: ", error);
+    throw error;
   }
-
 };
 
 export default getWatchListMovies;
