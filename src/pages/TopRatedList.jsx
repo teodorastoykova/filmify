@@ -23,7 +23,7 @@ function TopRated() {
           const topRatedTvSeries = await getTopRatedTvSeries();
           setSeries(topRatedTvSeries);
         } else {
-          navigate("login");
+          navigate("/login");
           return;
         }
       } catch (error) {
@@ -41,7 +41,7 @@ function TopRated() {
     navigate(`/series/${tvSeries.id}`);
   };
 
-  return (
+  return sessionId ? (
     <>
       <Header />
       <Typography variant="h3" gutterBottom>
@@ -53,7 +53,7 @@ function TopRated() {
       </Typography>
       <TvSeriesPoster tvSeries={series} onTvSeriesClick={handleTvSeriesClick} />
     </>
-  );
+  ) : null;
 }
 
 export default TopRated;
