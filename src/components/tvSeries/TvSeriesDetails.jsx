@@ -43,6 +43,7 @@ const TvSeriesDetails = () => {
   }, [seriesId, sessionId]);
 
   const handleRateClick = async (newValue) => {
+    console.log("rate");
     submitRatingTvSeries(seriesId, newValue, sessionId);
     setTvSeriesRating(newValue);
   };
