@@ -21,14 +21,14 @@ const Browse = () => {
       if (searchQuery) {
         try {
           const data = await getBrowseResults(searchQuery);
-
+        
           const results = data || [];
 
           const moviesList = results.filter(
-            (item) => item.media_type === "movie"
+            (item) => item.mediaType === "movie"
           );
           const tvSeriesList = results.filter(
-            (item) => item.media_type === "tv"
+            (item) => item.mediaType === "tv"
           );
 
           setMovies(moviesList);
