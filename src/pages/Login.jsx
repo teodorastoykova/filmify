@@ -19,16 +19,37 @@ import getSessionId from "../services/Common/SessionService";
 
 const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-unused-vars
-    const formData = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
+    const email = data.get("email");
+    const password = data.get("password");
+
+    let valid = true;
+
+    if (!email) {
+      setEmailError("Email is required");
+      valid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (!password) {
+      setPasswordError("Password is required");
+      valid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    if (!valid) {
+      return;
+    }
+
     try {
       const token = await getToken();
       if (token) {
@@ -80,6 +101,8 @@ const Login = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            error={!!emailError}
+            helperText={emailError}
           />
           <TextField
             margin="normal"
@@ -90,6 +113,8 @@ const Login = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            error={!!passwordError}
+            helperText={passwordError}
           />
           <FormControlLabel
             control={<Checkbox value="remember" />}
@@ -110,7 +135,7 @@ const Login = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signup" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
